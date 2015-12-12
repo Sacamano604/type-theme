@@ -1,14 +1,14 @@
 # SITE CONFIGURATION
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://example.com" # the base hostname & protocol for your site
+url: "http://bentoussi.com" # the base hostname & protocol for your site
 
 # THEME-SPECIFIC CONFIGURATION
 theme:
   # Meta
-  title: Type Theme
+  title: Ben Toussi
   avatar: avatar.png
   gravatar: # Email MD5 hash
-  description: "A website with blog posts and pages" # used by search engines
+  description: "A curious web developer" # used by search engines
 
   # Header and footer text
   header_text: >
@@ -62,8 +62,10 @@ theme:
   post_navigation: false
 
 # PAGINATION
+
 paginate: 5
 paginate_path: "blog/page:num"
+
 
 # BUILD SETTINGS
 markdown: kramdown
@@ -71,3 +73,6 @@ highlighter: pygments
 sass:
   sass_dir: _sass
   style: :compressed
+gems: 
+  - jekyll-paginate
+
