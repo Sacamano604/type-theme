@@ -2,11 +2,12 @@
 layout: page
 title: About
 permalink: /about/
-feature-img: "img/sample_feature_img_2.png"
 ---
 
-Type Theme is a free and open-source theme for [Jekyll](http://jekyllrb.com/), licensed under the MIT License.
+Even though I have been working as a Technical Support Analyst for the past four years, my background and passion will always be web development.
 
-Head over to the [theme's documentation](https://rohanchandra.github.io/project/type/) for much more information about Type Theme or to install this theme on your own Jekyll site.
+My first experience with web coding was back in 1999 when I would view the source of pages to see how they were written. I would play around with code locally, see how it works and fits together. I would code in a text editor and change the extension of the file from .txt to .html. To me it was magic.
 
-This file is an example of a page in Jekyll, that automatically shows up in the header navigation, you can delete or modify this file freely.
+In short I love the internet, how it works, and how to make things that work with it.
+
+I enjoy coming up with little side projects and things to create. I have a github account that I'm active on and will be blogging about things I code. Feel free to contact me if you have any feedback or suggestions. 
