@@ -19,7 +19,7 @@ permalink: /projects/
 <tr>
 <td>Learning Angular Series</td>
 <td>AngularJS, PHP, mySQLi, JSON</td>
-<td><a href="http://www.bentoussi.com/angularjs/day10/" target="_blank">Link</a></td>
+<td><a href="http://www.bentoussi.com/angularjs/day14/" target="_blank">Link</a></td>
 </tr>
 <tr>
 <td>Gem Calculator</td>

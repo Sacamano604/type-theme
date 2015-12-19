@@ -1,0 +1,43 @@
+---
+layout: post
+title: Learning AngularJS - Day 6
+---
+
+It was time to create a details page. My plan was to move the website link to it’s own column, and make the link around the team name go to a page that provides more detail. Eventually I’ll need to add more columns to that database, but we will cross that bridge when we get there (If the table view is displaying all the information anyway, what’s the point of having a details page).
+
+The first thing that needed to be done was a small clean up. The app was beginning to take shape and I had to split it all apart to keep track of everything. This is where I really started to unleash some of Angular’s powers. I was going to use a file to manage my views, a file to manage my controllers, a file to show me a list of teams, and a file to show me the details of the team clicked. I created a couple of files, and added some links.
+
+Here’s what my <span style="color: #ff0000;">index.html</span> page looked like:
+
+<script src="https://gist.github.com/Sacamano604/58f5de2988a46108932f.js"></script><!--more--> I created a div and applied the <span style="color: #ff0000;">ng-view</span> directive to it. What this is doing is telling Angular that this is where the views for the app go. Below that you’ve seen before, I’m linking to jquery, bootstrap and Angular. I also had to link to Angular routing too, I wouldn’t be able to create and change views through the route provider if I didn’t have route script. Then you can see I split my app into two js files; one for the controllers, and one for the app itself. We will get to that but I should first show you how I managed the PHP on this project. Previously I had the php file connect to the database, pull down the data, put it into an array, parse it into JSON and spit it out. I needed it to do more. With viewing details, adding teams and editing teams I would need PHP. A good way to handle this is to have my PHP file setup like a switch, and whatever function or action I would need it to do I could pass that action to the file. The top of the PHP file doesn’t change:<script src="https://gist.github.com/Sacamano604/eadc96a3ffbddba75bf7.js"></script>
+
+Connect to the database with the following information, or spit out an error...simple, we’ve covered this in the past. Now was time to move the current code into the switch.
+
+<script src="https://gist.github.com/Sacamano604/1d04652ed35bcce62024.js"></script>This is the PHP we had before which fetches the information for us and encodes it to JSON. To call this switch function, I would have to pass ‘<span style="color: #ff0000;">/teams.php?action=list</span>’ ( telling PHP; we need the '<span style="color: #ff0000;">action</span>' switch, specifically the '<span style="color: #ff0000;">list</span>' function). To create the PHP function for the details view had to be a little different. We wouldn’t want all the data from the table. So we had to pass it the ID of the team we needed. This is why I created an ID column with an auto-increment feature, all the teams would automatically be assigned an ID in order of them being added to the table. So for the details case reads that if we have an ID, get the ID # then match it with all the details from our table with the same ID. From there it will fetch the details in the row from that ID, put them into an array and encode them to JSON. To call our detail page we would need to pass ‘ '<span style="color: #ff0000;">teams/teams.php?action=detail&amp;id=' + $scope.teamId</span> ‘, you see we need to pass the action of the switch which is ‘<span style="color: #ff0000;">detail</span>’ AND the ID we want the function to use.<script src="https://gist.github.com/Sacamano604/a97313ee01785e56b27e.js"></script>
+
+Our <span style="color: #ff0000;">footballApp.js</span> file was next. For this I needed to learn about <a href="https://docs.angularjs.org/api/ngRoute" target="_blank">ng-route</a> and views. <span style="color: #ff0000;">ng-route</span> provides a routing service for AngularJS so we needed to use it. The first line in there we had to tell angular that our ‘<span style="color: #ff0000;">footballApp</span>’ would need the <span style="color: #ff0000;">ngRoute</span> module, and point it to our controllers too. “<span style="color: #ff0000;">footballControllers</span>” being the name we give the controllers in the controller file.
+
+<script src="https://gist.github.com/Sacamano604/a4aa1fa91a420a2d074c.js" type="mce-text/javascript"></script>
+
+Angular knows we need routing, so now it's time to configure the route provider. The routes below tell the app what view needs to be displayed at any given time, and what controller is ‘in charge’ or responsible for that view. So the first view says: if you’re in the ‘<span style="color: #ff0000;">teams</span>’ directory, use the ‘<span style="color: #ff0000;">teamList.html</span>’ template, and while you’re there use the ‘<span style="color: #ff0000;">teamListController</span>’. The second view says: if you’re in the ‘<span style="color: #ff0000;">teams/:teamId</span>’ directory, use ‘<span style="color: #ff0000;">teamTemplate.html</span>’ template, and use the ‘<span style="color: #ff0000;">teamDetailController</span>’...but by default (or ‘otherwise’) use the ‘<span style="color: #ff0000;">/teams</span>’ directory/view.
+
+<span style="color: #ff0000;">footballController.js</span> is where it’s going to come together. The controllers we pointed to in the app.js file are going to be declared here. Remember in the app file we told angular our app has the <span style="color: #ff0000;">ngRoute</span> module and we pointed it to ‘<span style="color: #ff0000;">footballControllers</span>’? It was time to create that.
+
+<script src="https://gist.github.com/Sacamano604/f16f28df93f33f9ffcfe.js"></script>Our first view was reliant on the ‘<span style="color: #ff0000;">teamListController</span>’ so that’s the first controller we’ll need.<script src="https://gist.github.com/Sacamano604/faced8ae44906e78bf8f.js"></script>
+
+You’ve seen all of this before, except the one line that has the URL to the JSON. In the PHP file above we created the switch called ‘<span style="color: #ff0000;">action</span>’ and two functions inside. Here we’re calling for the ‘<span style="color: #ff0000;">list</span>’ switch to get our JSON data.
+
+Our second view was reliant on the ‘<span style="color: #ff0000;">teamDetailController</span>’. Here we need to pass it <a href="https://docs.angularjs.org/api/ngRoute/service/$routeParams" target="_blank">$routeParams</a> because we need to match the ID clicked to our URL passed.
+
+<script src="https://gist.github.com/Sacamano604/4e170c9db71b16d2c8a7.js"></script>The line here that’s tricky is, again, the URL passed. If you remember, our details switch needed an ID passed to it. With ‘<span style="color: #ff0000;">url: 'teams/teams.php?action=detail&amp;id=' + $scope.teamId</span>’ we’re calling the PHP file, asking for the action switch list, detail function, with the id. ID was pulled from the scope through <span style="color: #ff0000;">$routeParams</span> so let's use it here for the JSON call. I also put the data in the ‘team’ scope and not the ‘teams’ being that we only need the data for one team. All we needed to do now was create our views. After moving the website link to its own column, <span style="color: #ff0000;">teamList.html</span> ended up looking like this.<script src="https://gist.github.com/Sacamano604/b7e56e7c50fbc5b1cef1.js"></script>
+
+The only major change is the link to the team’s name. It’s actually very straight forward in that we’re using databinding to create the link to the team ID. Notice also that I call the controller in the table with the <span style="color: #ff0000;">ng-controller</span> directive.
+
+In the <span style="color: #ff0000;">teamTemplate.htm</span>l file we just ouput the data we’ve collected in the PHP function. I declare that this view needs the <span style="color: #ff0000;">teamDetailController</span> and then output the data. This template is very bare, and I would obviously like to add more to it.
+
+<script src="https://gist.github.com/Sacamano604/bd1f33588d7e8aa858d1.js"></script>
+
+Next I would really like to create a page to add teams to the database. I think at that point I’ll create two more columns; one for an image and one for a description. I would love the functionality to add the logos for the teams and maybe a paragraph with a brief bio on the club.
+
+<strong>Source Files:</strong> <a href="http://goo.gl/hB4FUo" target="_blank">http://goo.gl/hB4FUo</a><br />
+<strong>Working Project:</strong> <a href="http://bentoussi.com/angularjs/day06" target="_blank">http://bentoussi.com/angularjs/day06</a>
